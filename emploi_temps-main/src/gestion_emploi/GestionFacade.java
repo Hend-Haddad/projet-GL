@@ -20,6 +20,9 @@ public class GestionFacade {
     }
 
     // ============ CLASSE =============
+    public Classe getClasseService() {
+        return this.classeService;
+    }
     public void ajouterClasse(String libelle, String description) {
         classeService.ajouter_classe(libelle, description);
     }

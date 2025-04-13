@@ -303,7 +303,6 @@ if(username.getText().equals("") || password.getText().equals("")){
             }
         });
     }
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;

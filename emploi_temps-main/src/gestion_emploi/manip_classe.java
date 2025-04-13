@@ -10,7 +10,8 @@ import java.sql.ResultSet;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import net.proteanit.sql.DbUtils;
-
+import observer.ClasseComboBoxObserver;
+import observer.ClasseTableObserver;
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -486,7 +487,14 @@ public class manip_classe extends javax.swing.JFrame {
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
       
         
-    	facade.getClasseListAndTable( tabl_classe, list_classe);
+    	//facade.getClasseListAndTable( tabl_classe, list_classe);
+    	// Enregistrement des observateurs
+        Classe classe = facade.getClasseService();
+        new ClasseTableObserver(classe, tabl_classe);
+        new ClasseComboBoxObserver(classe, list_classe);
+
+        // Chargement initial (notification manuelle pour le premier affichage)
+        classe.notifyObservers();
        
     }//GEN-LAST:event_formWindowOpened
 
@@ -536,8 +544,8 @@ if(libelle.getText().equals("")  || description.getText().equals("") ){
         }
      
       
-        facade.updateTableClasse(tabl_classe); 
-        facade.chargerListeClasse(list_classe); 
+        //facade.updateTableClasse(tabl_classe); 
+        //facade.chargerListeClasse(list_classe); 
     }//GEN-LAST:event_ajouterActionPerformed
 
     private void ajouter4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ajouter4ActionPerformed
@@ -553,8 +561,8 @@ if(libelle.getText().equals("")  || description.getText().equals("") ){
        list_classe.setSelectedItem("Votre Choix:");
            description_action.setText("");
            libelle_action.setText(""); 
-           facade.updateTableClasse(tabl_classe); 
-           facade.chargerListeClasse(list_classe);
+           //facade.updateTableClasse(tabl_classe); 
+           //facade.chargerListeClasse(list_classe);
 }
     }
     }//GEN-LAST:event_ajouter4ActionPerformed
@@ -572,35 +580,22 @@ if(libelle.getText().equals("")  || description.getText().equals("") ){
         }
          else {
         	 facade.modifierClasse(libelle_action.getText(), description_action.getText(), choix);
-        	 facade.updateTableClasse(tabl_classe); 
-        	 facade.chargerListeClasse(list_classe);
+        	 //facade.updateTableClasse(tabl_classe); 
+        	 //facade.chargerListeClasse(list_classe);
          }
     }//GEN-LAST:event_ajouter6ActionPerformed
 
-    private void list_classeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_list_classeActionPerformed
-        
-          
- /*verif si la matricule déja existe*/
- 
- String choix=  list_classe.getSelectedItem().toString();
-           
-             
-        if(choix=="Votre Choix:")
-        {  
-             libelle_action.setText("");
-        description_action.setText("");
-       
+    private void list_classeActionPerformed(java.awt.event.ActionEvent evt) {
+        Object selected = list_classe.getSelectedItem();
+        if (selected == null || selected.toString().equals("Votre Choix:")) {
+            libelle_action.setText("");
+            description_action.setText("");
+        } else {
+            String choix = selected.toString();
+            facade.remplirFormulaireClasse(choix, libelle_action, description_action);
         }
-        else {
-        	facade.remplirFormulaireClasse(choix, libelle_action, description_action);
-        }
-        
-        
-            
-            
-        
-        
-    }//GEN-LAST:event_list_classeActionPerformed
+    }
+
 
     private void list_classePropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_list_classePropertyChange
         // TODO add your handling code here:
@@ -611,17 +606,8 @@ if(libelle.getText().equals("")  || description.getText().equals("") ){
 
     }//GEN-LAST:event_formWindowClosed
 
-
-
-    /**
-     * @param args the command line arguments
-     */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
+
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
