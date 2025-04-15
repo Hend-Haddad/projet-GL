@@ -18,7 +18,7 @@ public class manip_classe extends javax.swing.JFrame {
     /**
      * Creates new form manip_ensei
      */
-	connexion cnx = connexion.getInstance();
+	DatabaseConnection dbConnection = connexion.getInstance();
    GestionFacade facade = new GestionFacade();
    
     public manip_classe() {

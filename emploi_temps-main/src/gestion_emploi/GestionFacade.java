@@ -12,10 +12,11 @@ public class GestionFacade {
 
 
     public GestionFacade() {
-        this.classeService = new Classe();
-        this.enseignantService = new Enseignant();
-        this.seanceService = new Seance();
-        this.etudiantService = new Class_etudiant();
+    	DatabaseConnection dbConnection = connexion.getInstance();
+        this.classeService = new Classe(dbConnection);
+        this.enseignantService = new Enseignant(dbConnection);
+        this.seanceService = new Seance(dbConnection);
+        this.etudiantService = new Class_etudiant(dbConnection);
 
     }
 
@@ -94,27 +95,27 @@ public class GestionFacade {
         etudiantService.loading(listeClasse, listeMatiere);
     }
     public void updateTableEnseignants(JTable table) {
-        Enseignant enseignant = new Enseignant();
+        Enseignant enseignant = new Enseignant(connexion.getInstance());
         enseignant.update_table(table);
     }
     public void getClasseListAndTable(JTable table, JComboBox<String> comboBox) {
         classeService.get(table, comboBox);
     }
     public boolean verifierMatriculeExiste(String matricule) {
-        return new Enseignant().get_by_matricule(matricule).equals("true");
+        return new Enseignant(connexion.getInstance()).get_by_matricule(matricule).equals("true");
     }
 
     public void remplirFormulaireEnseignant(String matricule, javax.swing.JTextField nom, javax.swing.JTextField contact) {
-        new Enseignant().change_list_enseignant(nom, contact, matricule);
+        new Enseignant(connexion.getInstance()).change_list_enseignant(nom, contact, matricule);
     }
     public void loadingSeance(JComboBox<String> enseignants, JComboBox<String> seances, JComboBox<String> classesAjout, JComboBox<String> classesRecherche, JComboBox<String> matieres, JTable table) {
-        Seance seance = new Seance();
+        Seance seance = new Seance(connexion.getInstance());
         seance.loading(enseignants, seances, classesAjout, classesRecherche, matieres, table);
     }
 
     
     public void rechercherSeance(JTable table, String classe, String matiere) {
-        new Seance().chercher(table, classe, matiere);
+        new Seance(connexion.getInstance()).chercher(table, classe, matiere);
     }
     public void updateListeSeance(JComboBox<String> comboBox) {
     	seanceService.update_list_seance(comboBox);
@@ -124,10 +125,10 @@ public class GestionFacade {
     	 seanceService.update_list_matiere(comboBox);
     }
     public boolean verifierLibelleClasseExiste(String libelle) {
-        return new Classe().get_by_libelle(libelle).equals("true");
+        return new Classe(connexion.getInstance()).get_by_libelle(libelle).equals("true");
     }
     public void remplirFormulaireClasse(String libelleClasse, javax.swing.JTextField champLibelle, javax.swing.JTextArea champDescription) {
-        new Classe().change_list_classe(champLibelle, champDescription, libelleClasse);
+        new Classe(connexion.getInstance()).change_list_classe(champLibelle, champDescription, libelleClasse);
     }
 
 

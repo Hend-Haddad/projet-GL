@@ -15,7 +15,8 @@ public class login extends javax.swing.JFrame {
     /**
      * Creates new form login
      */
-	connexion cnx = connexion.getInstance();
+	DatabaseConnection dbConnection = connexion.getInstance();
+
     public login() {
         initComponents();
     }
@@ -224,7 +225,7 @@ if(username.getText().equals("") || password.getText().equals("")){
          password_label.setText("");
         }
 }else{
- PreparedStatement st =  cnx.getConnection()
+ PreparedStatement st =  dbConnection.getConnection()
                         .prepareStatement("Select * from user where user=? and pwd=?");
 
                     st.setString(1, username.getText());
