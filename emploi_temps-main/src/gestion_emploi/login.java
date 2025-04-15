@@ -9,22 +9,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 
-/**
- *
- * @author Achref
- */
 public class login extends javax.swing.JFrame {
 
     /**
      * Creates new form login
      */
-    connexion cnx=new connexion();
+	connexion cnx = connexion.getInstance();
     public login() {
         initComponents();
     }
@@ -233,7 +224,7 @@ if(username.getText().equals("") || password.getText().equals("")){
          password_label.setText("");
         }
 }else{
- PreparedStatement st =  cnx.connexion()
+ PreparedStatement st =  cnx.getConnection()
                         .prepareStatement("Select * from user where user=? and pwd=?");
 
                     st.setString(1, username.getText());

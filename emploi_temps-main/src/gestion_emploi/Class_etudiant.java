@@ -1,15 +1,6 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package gestion_emploi;
 
-/**
- *
- * @author Samir Souidi
- */
-  
+
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -20,7 +11,7 @@ import net.proteanit.sql.DbUtils;
 
 public class Class_etudiant {
      public PreparedStatement st;
-    public   connexion cnx=new connexion();
+     connexion cnx = connexion.getInstance();
     
   public void chercher_et(JTable tabl_seance_et, String choix_classe, String choix_matiere,String choix_jour) {
     try {
@@ -51,7 +42,7 @@ for (String jour : jours) {
                     + "where classe='" + choix_classe + "' and seance.jour='" + jour + "' ";
         }
 
-        st = cnx.connexion().prepareStatement(sql);
+        st = cnx.getConnection().prepareStatement(sql);
         ResultSet rs = st.executeQuery();
 
         // Ajout manuel des lignes
@@ -87,7 +78,7 @@ else {
                     + "where classe='" + choix_classe + "' and seance.jour='" + choix_jour + "' ";
         }
 
-        st = cnx.connexion().prepareStatement(sql);
+        st = cnx.getConnection().prepareStatement(sql);
         ResultSet rs = st.executeQuery();
 
         // Ajout manuel des lignes
@@ -125,7 +116,7 @@ else {
             
 
   String sql1="SELECT * FROM classe";
-PreparedStatement pst1=cnx.connexion().prepareStatement(sql1); 
+PreparedStatement pst1=cnx.getConnection().prepareStatement(sql1); 
 ResultSet rs1=pst1.executeQuery();
 /* initialise liste déroulante dans le formulaire d'ajout*/
 
@@ -139,7 +130,7 @@ list_classe2.addItem("Votre Choix:");
   }
   
   String sql2="SELECT DISTINCT(matiere) as matiere FROM seance";
-PreparedStatement pst2=cnx.connexion().prepareStatement(sql2); 
+PreparedStatement pst2=cnx.getConnection().prepareStatement(sql2); 
 ResultSet rs2=pst2.executeQuery();
 list_matiere.removeAllItems();
 list_matiere.addItem("Votre Choix:");

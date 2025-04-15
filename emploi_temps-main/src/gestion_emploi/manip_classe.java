@@ -12,22 +12,13 @@ import javax.swing.table.DefaultTableModel;
 import net.proteanit.sql.DbUtils;
 import observer.ClasseComboBoxObserver;
 import observer.ClasseTableObserver;
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 
-/**
- *
- * @author Achref
- */
 public class manip_classe extends javax.swing.JFrame {
 
     /**
      * Creates new form manip_ensei
      */
-   connexion cnx=new connexion();
+	connexion cnx = connexion.getInstance();
    GestionFacade facade = new GestionFacade();
    
     public manip_classe() {
