@@ -13,12 +13,16 @@ public class Seance {
     
     
      public PreparedStatement st;
-    public   connexion cnx = connexion.getInstance();
+     private final DatabaseConnection dbConnection;
+
+     public Seance(DatabaseConnection dbConnection) {
+         this.dbConnection = dbConnection;
+     }
    public void ajouter_seance(String choix_classe,String matiere,String choix_jour,String heure,String choix_enseignant)
    {
        try 
        {
-          st =  cnx.getConnection()
+          st =  dbConnection.getConnection()
                 .prepareStatement("Select * from seance where "
                     + "classe=?  and matiere=? and jour=? and heure=? and matricule=?");
 
@@ -34,7 +38,7 @@ public class Seance {
                     JOptionPane.showMessageDialog(null,"Séance déja existe");
                 }
                 else {
-                    PreparedStatement st =  cnx.getConnection()
+                    PreparedStatement st =  dbConnection.getConnection()
                     .prepareStatement("INSERT INTO seance (`classe`, `matiere`, `jour`, `heure`, `matricule`) "
                         + "values(?,?,?,?,?)");
 
@@ -60,7 +64,7 @@ public class Seance {
     {
        
 String sql="SELECT * FROM seance";
-PreparedStatement pst=cnx.getConnection().prepareStatement(sql); 
+PreparedStatement pst=dbConnection.getConnection().prepareStatement(sql); 
 ResultSet rs=pst.executeQuery();
 tabl_seance.setModel(DbUtils.resultSetToTableModel(rs));
 
@@ -75,7 +79,7 @@ tabl_seance.setModel(DbUtils.resultSetToTableModel(rs));
         try
                 {
 
-                    PreparedStatement st =  cnx.getConnection()
+                    PreparedStatement st =  dbConnection.getConnection()
                     .prepareStatement("DELETE FROM  seance   where id_seance= '" + choix + "'");
                    
 
@@ -106,7 +110,7 @@ tabl_seance.setModel(DbUtils.resultSetToTableModel(rs));
                      + "where classe='"+choix_classe+"' ";
            }
                 
- st=cnx.getConnection().prepareStatement(sql); 
+ st=dbConnection.getConnection().prepareStatement(sql); 
 ResultSet rs=st.executeQuery();
 tabl_seance1.setModel(DbUtils.resultSetToTableModel(rs));
       }
@@ -122,7 +126,7 @@ tabl_seance1.setModel(DbUtils.resultSetToTableModel(rs));
     {
         
 String sql="SELECT * FROM seance";
-PreparedStatement pst=cnx.getConnection().prepareStatement(sql); 
+PreparedStatement pst=dbConnection.getConnection().prepareStatement(sql); 
 ResultSet rs=pst.executeQuery();
 list_seance.removeAllItems();
 list_seance.addItem("Votre Choix:");
@@ -142,7 +146,7 @@ list_seance.addItem("Votre Choix:");
     {
         
 String sql="SELECT DISTINCT(matiere) as matiere FROM seance";
-PreparedStatement pst=cnx.getConnection().prepareStatement(sql); 
+PreparedStatement pst=dbConnection.getConnection().prepareStatement(sql); 
 ResultSet rs=pst.executeQuery();
 list_matiere.removeAllItems();
 list_matiere.addItem("Votre Choix:");
@@ -164,7 +168,7 @@ list_matiere.addItem("Votre Choix:");
         {
             
 String sql0="SELECT matricule FROM enseignant";
-PreparedStatement pst0=cnx.getConnection().prepareStatement(sql0); 
+PreparedStatement pst0=dbConnection.getConnection().prepareStatement(sql0); 
 ResultSet rs0=pst0.executeQuery();
 list_enseignant_ajout.removeAllItems();
 list_enseignant_ajout.addItem("Votre Choix:");
@@ -173,7 +177,7 @@ list_enseignant_ajout.addItem("Votre Choix:");
                list_enseignant_ajout.addItem(rs0.getString("matricule"));
   }
   String sql="SELECT id_seance FROM seance";
-PreparedStatement pst=cnx.getConnection().prepareStatement(sql); 
+PreparedStatement pst=dbConnection.getConnection().prepareStatement(sql); 
 ResultSet rs=pst.executeQuery();
 list_seance.removeAllItems();
 list_seance.addItem("Votre Choix:");
@@ -182,7 +186,7 @@ list_seance.addItem("Votre Choix:");
                list_seance.addItem(rs.getString("id_seance"));
   }
   String sql1="SELECT * FROM classe";
-PreparedStatement pst1=cnx.getConnection().prepareStatement(sql1); 
+PreparedStatement pst1=dbConnection.getConnection().prepareStatement(sql1); 
 ResultSet rs1=pst1.executeQuery();
 /* initialise liste déroulante dans le formulaire d'ajout*/
 list_classe_ajout.removeAllItems();
@@ -198,7 +202,7 @@ list_classe2.addItem("Votre Choix:");
   }
   
   String sql2="SELECT DISTINCT(matiere) as matiere FROM seance";
-PreparedStatement pst2=cnx.getConnection().prepareStatement(sql2); 
+PreparedStatement pst2=dbConnection.getConnection().prepareStatement(sql2); 
 ResultSet rs2=pst2.executeQuery();
 list_matiere.removeAllItems();
 list_matiere.addItem("Votre Choix:");

@@ -11,7 +11,11 @@ import net.proteanit.sql.DbUtils;
 
 public class Classe implements Subject {
     private final ArrayList<Observer> observers = new ArrayList<>();
-    connexion cnx = connexion.getInstance();
+    private final DatabaseConnection dbConnection;
+
+    public Classe(DatabaseConnection dbConnection) {
+        this.dbConnection = dbConnection;
+    }
     PreparedStatement st;
 
     @Override
@@ -33,7 +37,7 @@ public class Classe implements Subject {
 
     public void ajouter_classe(String libelle, String description) {
         try {
-        	st = cnx.getConnection().prepareStatement(
+        	st = dbConnection.getConnection().prepareStatement(
                 "INSERT INTO classe(libelle_classe, description) VALUES(?, ?)"
             );
             st.setString(1, libelle);
@@ -50,7 +54,7 @@ public class Classe implements Subject {
 
     public void supprimer_classe(String libelle) {
         try {
-        	st = cnx.getConnection().prepareStatement(
+        	st = dbConnection.getConnection().prepareStatement(
                 "DELETE FROM classe WHERE libelle_classe=?"
             );
             st.setString(1, libelle);
@@ -64,7 +68,7 @@ public class Classe implements Subject {
 
     public void modifier_classe(String nouveauLibelle, String description, String ancienLibelle) {
         try {
-        	st = cnx.getConnection().prepareStatement(
+        	st =dbConnection.getConnection().prepareStatement(
                 "UPDATE classe SET libelle_classe=?, description=? WHERE libelle_classe=?"
             );
             st.setString(1, nouveauLibelle);
@@ -84,7 +88,7 @@ public class Classe implements Subject {
 
     public void update_table(JTable tabl_classe) {
         try {
-        	st = cnx.getConnection().prepareStatement("SELECT * FROM classe");
+        	st = dbConnection.getConnection().prepareStatement("SELECT * FROM classe");
             ResultSet rs = st.executeQuery();
             tabl_classe.setModel(DbUtils.resultSetToTableModel(rs));
         } catch (Exception e) {
@@ -94,7 +98,7 @@ public class Classe implements Subject {
 
     public void update_list(JComboBox<String> list_classe) {
         try {
-        	st = cnx.getConnection().prepareStatement("SELECT libelle_classe FROM classe");
+        	st = dbConnection.getConnection().prepareStatement("SELECT libelle_classe FROM classe");
             ResultSet rs = st.executeQuery();
             list_classe.removeAllItems();
             list_classe.addItem("Votre Choix:");
@@ -108,7 +112,7 @@ public class Classe implements Subject {
 
     public String get_by_libelle(String libelle) {
         try {
-        	st = cnx.getConnection().prepareStatement("SELECT * FROM classe WHERE libelle_classe=?");
+        	st = dbConnection.getConnection().prepareStatement("SELECT * FROM classe WHERE libelle_classe=?");
             st.setString(1, libelle);
             ResultSet rs = st.executeQuery();
             if (rs.next()) return "true";
@@ -120,7 +124,7 @@ public class Classe implements Subject {
 
     public void change_list_classe(javax.swing.JTextField libelle, javax.swing.JTextArea description, String choix) {
         try {
-        	st = cnx.getConnection().prepareStatement("SELECT * FROM classe WHERE libelle_classe=?");
+        	st = dbConnection.getConnection().prepareStatement("SELECT * FROM classe WHERE libelle_classe=?");
             st.setString(1, choix);
             ResultSet rs = st.executeQuery();
             if (rs.next()) {

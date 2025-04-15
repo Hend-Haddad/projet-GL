@@ -11,7 +11,11 @@ import net.proteanit.sql.DbUtils;
 
 public class Class_etudiant {
      public PreparedStatement st;
-     connexion cnx = connexion.getInstance();
+     private final DatabaseConnection dbConnection;
+
+     public Class_etudiant(DatabaseConnection dbConnection) {
+         this.dbConnection = dbConnection;
+     }
     
   public void chercher_et(JTable tabl_seance_et, String choix_classe, String choix_matiere,String choix_jour) {
     try {
@@ -42,7 +46,7 @@ for (String jour : jours) {
                     + "where classe='" + choix_classe + "' and seance.jour='" + jour + "' ";
         }
 
-        st = cnx.getConnection().prepareStatement(sql);
+        st = dbConnection.getConnection().prepareStatement(sql);
         ResultSet rs = st.executeQuery();
 
         // Ajout manuel des lignes
@@ -78,7 +82,7 @@ else {
                     + "where classe='" + choix_classe + "' and seance.jour='" + choix_jour + "' ";
         }
 
-        st = cnx.getConnection().prepareStatement(sql);
+        st = dbConnection.getConnection().prepareStatement(sql);
         ResultSet rs = st.executeQuery();
 
         // Ajout manuel des lignes
@@ -116,7 +120,7 @@ else {
             
 
   String sql1="SELECT * FROM classe";
-PreparedStatement pst1=cnx.getConnection().prepareStatement(sql1); 
+PreparedStatement pst1=dbConnection.getConnection().prepareStatement(sql1); 
 ResultSet rs1=pst1.executeQuery();
 /* initialise liste déroulante dans le formulaire d'ajout*/
 
@@ -130,7 +134,7 @@ list_classe2.addItem("Votre Choix:");
   }
   
   String sql2="SELECT DISTINCT(matiere) as matiere FROM seance";
-PreparedStatement pst2=cnx.getConnection().prepareStatement(sql2); 
+PreparedStatement pst2=dbConnection.getConnection().prepareStatement(sql2); 
 ResultSet rs2=pst2.executeQuery();
 list_matiere.removeAllItems();
 list_matiere.addItem("Votre Choix:");

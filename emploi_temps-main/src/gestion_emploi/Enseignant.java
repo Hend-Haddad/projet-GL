@@ -17,12 +17,16 @@ public class Enseignant {
     String nom;
     String contact;
     PreparedStatement st;
-    connexion cnx = connexion.getInstance();
+    private final DatabaseConnection dbConnection;
+
+    public Enseignant(DatabaseConnection dbConnection) {
+        this.dbConnection = dbConnection;
+    }
     
     public void ajouter_enseignant(String matricule,String nom , String contact)
     {
          try
-         { st = cnx.getConnection().
+         { st = dbConnection.getConnection().
          prepareStatement("INSERT INTO enseignant values('" + matricule+ "',"
                    + "'" + nom + "','" +contact + "')");
 
@@ -42,7 +46,7 @@ public class Enseignant {
             
 
 
-  st =  cnx.getConnection()
+  st = dbConnection.getConnection()
                         .prepareStatement("Select * from enseignant ");
 
                   
@@ -68,7 +72,7 @@ model.addRow(new String[]{rs.getString(1),rs.getString(2),rs.getString(3)});
          {
              String req="Select * from enseignant where matricule='"+matricule+"' ";
               
-              st =  cnx.getConnection().prepareStatement(req);
+              st =  dbConnection.getConnection().prepareStatement(req);
              ResultSet  res = st.executeQuery();
              
           if(res.next())  
@@ -93,7 +97,7 @@ model.addRow(new String[]{rs.getString(1),rs.getString(2),rs.getString(3)});
     {
        
 String sql="SELECT * FROM enseignant";
- st=cnx.getConnection().prepareStatement(sql); 
+ st=dbConnection.getConnection().prepareStatement(sql); 
 ResultSet rs=st.executeQuery();
 tabl_enseignant.setModel(DbUtils.resultSetToTableModel(rs));
 
@@ -115,7 +119,7 @@ tabl_enseignant.setModel(DbUtils.resultSetToTableModel(rs));
         }
 
         String sql = "SELECT * FROM enseignant";
-        st = cnx.getConnection().prepareStatement(sql);
+        st = dbConnection.getConnection().prepareStatement(sql);
         ResultSet rs = st.executeQuery();
 
         DefaultComboBoxModel<String> model = (DefaultComboBoxModel<String>) list_matricule.getModel();
@@ -136,7 +140,7 @@ tabl_enseignant.setModel(DbUtils.resultSetToTableModel(rs));
 
           
            
-             st =  cnx.getConnection()
+             st =  dbConnection.getConnection()
             .prepareStatement("UPDATE  enseignant "
                     + "set nom='" + nom_action+ "',contact= '" +
                         contact_action + "' where matricule= '" + choix + "'");
@@ -161,7 +165,7 @@ tabl_enseignant.setModel(DbUtils.resultSetToTableModel(rs));
 
           
            
-             st =  cnx.getConnection()
+             st =  dbConnection.getConnection()
             .prepareStatement("DELETE FROM  enseignant   where matricule= '" + choix + "'");
 
              st.executeUpdate();
@@ -179,7 +183,7 @@ tabl_enseignant.setModel(DbUtils.resultSetToTableModel(rs));
  {
      try 
      {
-          st =  cnx.getConnection()
+          st =  dbConnection.getConnection()
                         .prepareStatement("Select * from enseignant where matricule='"+choix+"' ");
                    
                    
