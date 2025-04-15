@@ -11,28 +11,19 @@ import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import net.proteanit.sql.DbUtils;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 
-/**
- *
- * @author Achref
- */
 public class Enseignant {
     String matricule;
     String nom;
     String contact;
     PreparedStatement st;
-       connexion cnx=new connexion();
+    connexion cnx = connexion.getInstance();
     
     public void ajouter_enseignant(String matricule,String nom , String contact)
     {
          try
-         { st =  cnx.connexion()
-            .prepareStatement("INSERT INTO enseignant values('" + matricule+ "',"
+         { st = cnx.getConnection().
+         prepareStatement("INSERT INTO enseignant values('" + matricule+ "',"
                    + "'" + nom + "','" +contact + "')");
 
            
@@ -51,7 +42,7 @@ public class Enseignant {
             
 
 
-  st =  cnx.connexion()
+  st =  cnx.getConnection()
                         .prepareStatement("Select * from enseignant ");
 
                   
@@ -77,7 +68,7 @@ model.addRow(new String[]{rs.getString(1),rs.getString(2),rs.getString(3)});
          {
              String req="Select * from enseignant where matricule='"+matricule+"' ";
               
-              st =  cnx.connexion().prepareStatement(req);
+              st =  cnx.getConnection().prepareStatement(req);
              ResultSet  res = st.executeQuery();
              
           if(res.next())  
@@ -102,7 +93,7 @@ model.addRow(new String[]{rs.getString(1),rs.getString(2),rs.getString(3)});
     {
        
 String sql="SELECT * FROM enseignant";
- st=cnx.connexion().prepareStatement(sql); 
+ st=cnx.getConnection().prepareStatement(sql); 
 ResultSet rs=st.executeQuery();
 tabl_enseignant.setModel(DbUtils.resultSetToTableModel(rs));
 
@@ -124,7 +115,7 @@ tabl_enseignant.setModel(DbUtils.resultSetToTableModel(rs));
         }
 
         String sql = "SELECT * FROM enseignant";
-        st = cnx.connexion().prepareStatement(sql);
+        st = cnx.getConnection().prepareStatement(sql);
         ResultSet rs = st.executeQuery();
 
         DefaultComboBoxModel<String> model = (DefaultComboBoxModel<String>) list_matricule.getModel();
@@ -145,7 +136,7 @@ tabl_enseignant.setModel(DbUtils.resultSetToTableModel(rs));
 
           
            
-             st =  cnx.connexion()
+             st =  cnx.getConnection()
             .prepareStatement("UPDATE  enseignant "
                     + "set nom='" + nom_action+ "',contact= '" +
                         contact_action + "' where matricule= '" + choix + "'");
@@ -170,7 +161,7 @@ tabl_enseignant.setModel(DbUtils.resultSetToTableModel(rs));
 
           
            
-             st =  cnx.connexion()
+             st =  cnx.getConnection()
             .prepareStatement("DELETE FROM  enseignant   where matricule= '" + choix + "'");
 
              st.executeUpdate();
@@ -188,7 +179,7 @@ tabl_enseignant.setModel(DbUtils.resultSetToTableModel(rs));
  {
      try 
      {
-          st =  cnx.connexion()
+          st =  cnx.getConnection()
                         .prepareStatement("Select * from enseignant where matricule='"+choix+"' ");
                    
                    
