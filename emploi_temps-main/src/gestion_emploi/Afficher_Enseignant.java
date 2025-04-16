@@ -5,7 +5,7 @@ import javax.swing.JTable;
 
 public class Afficher_Enseignant extends JPanel {
 
-    // ✅ Instance de la façade
+    //  Instance de la façade
     GestionFacade facade = new GestionFacade();
 
     public Afficher_Enseignant() {
