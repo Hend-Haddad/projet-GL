@@ -3,6 +3,9 @@ import java.sql.ResultSet;
 
 import javax.swing.JComboBox;
 import javax.swing.JTable;
+
+import gestion_emploi.Strategies.TousLesJoursStrategy;
+
 import java.util.List;
 
 public class GestionFacade {
@@ -18,8 +21,8 @@ public class GestionFacade {
         this.classeService = new Classe(dbConnection);
         this.enseignantService = new Enseignant(dbConnection);
         this.seanceService = new SeanceService(new SeanceDAO(dbConnection));
-        this.etudiantService = new Class_etudiant(dbConnection);
-
+       
+        this.etudiantService = new Class_etudiant(new TousLesJoursStrategy(), dbConnection);
     }
 
     // ============ CLASSE =============
@@ -153,6 +156,4 @@ public class GestionFacade {
 	return new Seance(classe, matiere, jour, heureDebut + " & " + heureFin, matricule);
 	}
 	
-
-   
 }
