@@ -1,13 +1,15 @@
 package gestion_emploi;
+import java.sql.ResultSet;
 
 import javax.swing.JComboBox;
 import javax.swing.JTable;
+import java.util.List;
 
 public class GestionFacade {
 
     private final Classe classeService;
     private final Enseignant enseignantService;
-    private final Seance seanceService;
+    private final SeanceService seanceService;
     private final Class_etudiant etudiantService;
 
 
@@ -15,7 +17,7 @@ public class GestionFacade {
     	DatabaseConnection dbConnection = connexion.getInstance();
         this.classeService = new Classe(dbConnection);
         this.enseignantService = new Enseignant(dbConnection);
-        this.seanceService = new Seance(dbConnection);
+        this.seanceService = new SeanceService(new SeanceDAO(dbConnection));
         this.etudiantService = new Class_etudiant(dbConnection);
 
     }
@@ -66,25 +68,38 @@ public class GestionFacade {
     }
 
     // ============ SEANCE ==========
-    public void ajouterSeance(String classe, String matiere, String jour, String heure, String enseignant) {
-        seanceService.ajouter_seance(classe, matiere, jour, heure, enseignant);
+    public boolean ajouterSeance(Seance seance) {
+        return seanceService.ajouterSeance(seance);
     }
 
-    public void supprimerSeance(String idSeance) {
-        seanceService.delete_seance(idSeance);
+    public boolean supprimerSeance(String id) {
+        return seanceService.supprimerSeance(id);
     }
 
-    public void chercherSeances(JTable table, String classe, String matiere) {
-        seanceService.chercher(table, classe, matiere);
+    public ResultSet getToutesLesSeances() {
+        return seanceService.chargerToutesLesSeances();
     }
 
-    public void updateTableSeance(JTable table) {
-        seanceService.update_table(table);
+    public ResultSet chercher(String classe, String matiere) {
+        return seanceService.chercher(classe, matiere);
+    }
+    public List<String> getMatriculesEnseignants() {
+        return seanceService.getMatriculesEnseignants();
     }
 
-    public void chargerListeMatieres(JComboBox<String> list) {
-        seanceService.update_list_matiere(list);
+    public List<String> getIdSeances() {
+        return seanceService.getIdSeances();
     }
+
+    public List<String> getLibelleClasses() {
+        return seanceService.getLibelleClasses();
+    }
+
+    public List<String> getMatieres() {
+        return seanceService.getMatieres();
+    }
+
+
 
     // ============ ETUDIANT ==========
     public void chercherSeancesEtudiant(JTable table, String classe, String matiere, String jour) {
@@ -108,22 +123,8 @@ public class GestionFacade {
     public void remplirFormulaireEnseignant(String matricule, javax.swing.JTextField nom, javax.swing.JTextField contact) {
         new Enseignant(connexion.getInstance()).change_list_enseignant(nom, contact, matricule);
     }
-    public void loadingSeance(JComboBox<String> enseignants, JComboBox<String> seances, JComboBox<String> classesAjout, JComboBox<String> classesRecherche, JComboBox<String> matieres, JTable table) {
-        Seance seance = new Seance(connexion.getInstance());
-        seance.loading(enseignants, seances, classesAjout, classesRecherche, matieres, table);
-    }
 
-    
-    public void rechercherSeance(JTable table, String classe, String matiere) {
-        new Seance(connexion.getInstance()).chercher(table, classe, matiere);
-    }
-    public void updateListeSeance(JComboBox<String> comboBox) {
-    	seanceService.update_list_seance(comboBox);
-    }
-
-    public void updateListeMatiere(JComboBox<String> comboBox) {
-    	 seanceService.update_list_matiere(comboBox);
-    }
+  
     public boolean verifierLibelleClasseExiste(String libelle) {
         return new Classe(connexion.getInstance()).get_by_libelle(libelle).equals("true");
     }
