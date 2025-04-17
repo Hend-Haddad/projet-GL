@@ -14,7 +14,7 @@ public class connexion implements DatabaseConnection {
             connection = DriverManager.getConnection(
                 "jdbc:mysql://localhost:3306/Emploi_temps?useSSL=false",
                 "root",
-                "chaima"
+                "3kechA123*"
             );
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null,

@@ -1,4 +1,5 @@
 package gestion_emploi;
+import java.util.List;
 
 
 import java.sql.Connection;
@@ -714,10 +715,56 @@ public class manip_seance extends javax.swing.JFrame {
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
 
-    	facade.loadingSeance(list_enseignant_ajout, list_seance, list_classe_ajout, list_classe2, list_matiere, tabl_seance);
-
+    	//facade.loadingSeance(list_enseignant_ajout, list_seance, list_classe_ajout, list_classe2, list_matiere, tabl_seance);
+    	chargerMatriculesEnseignants();
+    	chargerIdSeances();
+    	chargerLibelleClasses();
+    	chargerMatieres();
+    	
    
     }//GEN-LAST:event_formWindowOpened
+    
+    private void chargerMatriculesEnseignants() {
+        List<String> matricules = facade.getMatriculesEnseignants();
+        list_enseignant_ajout.removeAllItems();
+        list_enseignant_ajout.addItem("Votre Choix:");
+        for (String m : matricules) {
+        	list_enseignant_ajout.addItem(m);
+        }
+    }
+
+    private void chargerIdSeances() {
+        List<String> idSeances = facade.getIdSeances();
+        list_seance.removeAllItems();
+        list_seance.addItem("Votre Choix:");
+        for (String id : idSeances) {
+        	list_seance.addItem(id);
+        }
+    }
+    private void chargerLibelleClasses() {
+        List<String> idClass = facade.getLibelleClasses();
+        list_classe_ajout.removeAllItems();
+        list_classe_ajout.addItem("Votre Choix:");
+        for (String id : idClass) {
+        	list_classe_ajout.addItem(id);
+            list_classe2.addItem(id);
+            
+        }
+    }
+    
+    private void chargerMatieres() {
+        List<String> idMat = facade.getMatieres();
+        list_matiere.removeAllItems();
+        list_matiere.addItem("Votre Choix:");
+        for (String id : idMat) {
+        	list_matiere.addItem(id);
+            
+        }
+        chargerTable();
+    }
+    
+   
+
 
     private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
 
@@ -771,13 +818,16 @@ public class manip_seance extends javax.swing.JFrame {
 
             if(dialogResult == 0) {
                 // Saving code here
-            	
-            	facade.supprimerSeance(choix);
+                 boolean success = facade.supprimerSeance(choix);
+
                  list_seance.setSelectedItem("Votre Choix:");
-                 facade.updateTableSeance(tabl_seance);
-                 facade.updateListeSeance(list_seance);
-                 facade.updateListeMatiere(list_matiere);
-                update_table_action();
+                 if (success) {
+                     JOptionPane.showMessageDialog(this, "Séance supprimée.");
+                     chargerTable();
+                 } else {
+                     JOptionPane.showMessageDialog(this, "Erreur lors de la suppression.");
+                 }
+                
             }
 
         }
@@ -804,36 +854,29 @@ public class manip_seance extends javax.swing.JFrame {
         } 
         else {
             /* requete recherche avec classe et matière*/
-            facade.rechercherSeance(tabl_seance1, choix_classe, choix_matiere);
+        	ResultSet rs = facade.chercher( choix_classe, choix_matiere);
+        	tabl_seance1.setModel(DbUtils.resultSetToTableModel(rs));
+
         }
             }
             else 
             {
                  
-                facade.rechercherSeance(tabl_seance1, choix_classe, null);
+            	ResultSet rs = facade.chercher( choix_classe, null);
+            	tabl_seance1.setModel(DbUtils.resultSetToTableModel(rs));
+
                 /* requete pour recherche juste classe*/
             }
             
         }
 
-    
-            /*   String choix=  list_matricule.getSelectedItem().toString();
-            PreparedStatement st =  cnx.connexion()
-            .prepareStatement("UPDATE  enseignant "
-                + "set nom='" + nom_action.getText() + "',contact= '" +
-                contact_action.getText() + "' where matricule= '" + choix + "'");
-
-            st.executeUpdate();
-
-            JOptionPane.showMessageDialog(null,"Données modifié avec succès");
-            */
         }
 
         catch(Exception e)
         {
 
         }
-        facade.updateTableSeance(tabl_seance);
+   
     }//GEN-LAST:event_ajouter6ActionPerformed
 
     private void list_seancePropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_list_seancePropertyChange
@@ -948,8 +991,16 @@ public class manip_seance extends javax.swing.JFrame {
             {
 
                 /*verif si la matricule déja existe*/
+                
                 String heure=choix_heuredebut+" & "+choix_heurefin;
-                facade.ajouterSeance(choix_classe, matiere.getText(), choix_jour, heure, choix_enseignant);
+                Seance s = new Seance(choix_classe, matiere.getText(), choix_jour, heure, choix_enseignant);
+                boolean success = facade.ajouterSeance(s);
+                if (success) {
+                    JOptionPane.showMessageDialog(this, "Séance ajoutée avec succès.");
+                    chargerTable();
+                } else {
+                    JOptionPane.showMessageDialog(this, "Séance déjà existante ou erreur.");
+                }
                 list_classe_ajout.setSelectedItem("Votre Choix:");
                 list_enseignant_ajout.setSelectedItem("Votre Choix:");
                 list_jour.setSelectedItem("Votre Choix:");
@@ -965,12 +1016,17 @@ public class manip_seance extends javax.swing.JFrame {
             System.out.print(e);
 
         }
-        facade.updateTableSeance(tabl_seance);
-        facade.updateListeSeance(list_seance);
-        facade.updateListeMatiere(list_matiere);
 
 
     }//GEN-LAST:event_ajouterActionPerformed
+    private void chargerTable() {
+        try {
+            ResultSet rs = facade.getToutesLesSeances();
+            tabl_seance.setModel(DbUtils.resultSetToTableModel(rs));
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Erreur lors du chargement des données.");
+        }
+    }
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
@@ -978,18 +1034,17 @@ public class manip_seance extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
 private void update_table_action()
-{ facade.updateTableSeance(tabl_seance1);
+{ 
 
+ResultSet rs = facade.getToutesLesSeances();
+tabl_seance1.setModel(DbUtils.resultSetToTableModel(rs));
     try
     {
-
     }
     catch(Exception e)
     {
     }
 }
-
-
 
     /**
      * @param args the command line arguments
