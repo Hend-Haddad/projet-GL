@@ -926,98 +926,35 @@ public class manip_seance extends javax.swing.JFrame {
     private void list_enseignant_ajoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_list_enseignant_ajoutActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_list_enseignant_ajoutActionPerformed
+    public void ajouterActionPerformed(java.awt.event.ActionEvent evt) {
+        // ... [votre code existant] ...
 
-    private void ajouterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ajouterActionPerformed
+        // Déclarer AVANT le try
+        Seance nouvelleSeance = null;
 
-        String choix_classe=  list_classe_ajout.getSelectedItem().toString();
-        String choix_enseignant=  list_enseignant_ajout.getSelectedItem().toString();
-        String choix_jour=  list_jour.getSelectedItem().toString();
-        String choix_heuredebut=  list_heuredebut.getSelectedItem().toString();
-        String choix_heurefin=  list_heurefin.getSelectedItem().toString();
-
-        try
-        {
-            if(choix_classe=="Votre Choix:" || choix_enseignant=="Votre Choix:" ||
-                matiere.getText().equals("") || choix_jour=="Votre Choix:" ||
-                choix_heuredebut=="Votre Choix:" ||  choix_heurefin=="Votre Choix:"    )
-            {
-                if(choix_classe=="Votre Choix:")
-                {
-                    label_classe.setText("Classe obligatoire");
-                }
-                else
-                {
-                    label_classe.setText("");
-                }
-                if(choix_enseignant=="Votre Choix:")
-                {
-                    label_enseignant.setText("Matricule obligatoire");
-                }
-                else{
-                    label_enseignant.setText("");
-                }
-
-                if(matiere.getText().equals(""))
-                {
-                    label_matiere.setText("Matiere obligatoire");
-                }else {
-                    label_matiere.setText("");
-                }
-
-                if(choix_jour=="Votre Choix:")
-                {
-                    label_jour.setText("Jour obligatoire");
-                }
-                else{
-                    label_jour.setText("");
-                }
-                if(choix_heuredebut=="Votre Choix:")
-                {
-                    label_heuredeb.setText("Heure obligatoire");
-                }
-                else{
-                    label_heuredeb.setText("");
-                }
-                if(choix_heurefin=="Votre Choix:")
-                {
-                    label_heurefin.setText("Heure obligatoire");
-                }
-                else{
-                    label_heurefin.setText("");
-                }
-
-            }
-            else
-            {
-
-                /*verif si la matricule déja existe*/
-                
-                String heure=choix_heuredebut+" & "+choix_heurefin;
-                Seance s = new Seance(choix_classe, matiere.getText(), choix_jour, heure, choix_enseignant);
-                boolean success = facade.ajouterSeance(s);
-                if (success) {
-                    JOptionPane.showMessageDialog(this, "Séance ajoutée avec succès.");
-                    chargerTable();
-                } else {
-                    JOptionPane.showMessageDialog(this, "Séance déjà existante ou erreur.");
-                }
-                list_classe_ajout.setSelectedItem("Votre Choix:");
-                list_enseignant_ajout.setSelectedItem("Votre Choix:");
-                list_jour.setSelectedItem("Votre Choix:");
-                list_heuredebut.setSelectedItem("Votre Choix:");
-                list_heurefin.setSelectedItem("Votre Choix:");
-                matiere.setText("");
-
-            }
-
-        }
-        catch(Exception e)
-        {
-            System.out.print(e);
-
+        try {
+            // Assigner dans le try
+            nouvelleSeance = facade.createSeance(
+                list_classe_ajout.getSelectedItem().toString(),
+                matiere.getText(),
+                list_jour.getSelectedItem().toString(),
+                list_heuredebut.getSelectedItem().toString(),
+                list_heurefin.getSelectedItem().toString(),
+                list_enseignant_ajout.getSelectedItem().toString()
+            );
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+            return; // Sortir si erreur
         }
 
-
+        // Utiliser APRÈS le try
+        if (nouvelleSeance != null) {
+            boolean succes = facade.ajouterSeance(nouvelleSeance);
+            if (succes) {
+                JOptionPane.showMessageDialog(this, "Succès !");
+                chargerTable();
+            }
+        }
     }//GEN-LAST:event_ajouterActionPerformed
     private void chargerTable() {
         try {

@@ -131,8 +131,28 @@ public class GestionFacade {
     public void remplirFormulaireClasse(String libelleClasse, javax.swing.JTextField champLibelle, javax.swing.JTextArea champDescription) {
         new Classe(connexion.getInstance()).change_list_classe(champLibelle, champDescription, libelleClasse);
     }
-
-
+    
+    public Seance createSeance(String classe, String matiere, String jour, 
+            String heureDebut, String heureFin, String matricule) 
+            throws IllegalArgumentException {
+	// Validation des entrées
+	if ("Votre Choix:".equals(classe)) {
+	throw new IllegalArgumentException("Sélectionnez une classe valide");
+	}
+	if ("Votre Choix:".equals(matricule)) {
+	throw new IllegalArgumentException("Sélectionnez un enseignant valide");
+	}
+	if (matiere == null || matiere.trim().isEmpty()) {
+	throw new IllegalArgumentException("La matière est obligatoire");
+	}
+	// Validation supplémentaire des heures
+	if ("Votre Choix:".equals(heureDebut) || "Votre Choix:".equals(heureFin)) {
+	throw new IllegalArgumentException("Sélectionnez des heures valides");
+	}
+	
+	return new Seance(classe, matiere, jour, heureDebut + " & " + heureFin, matricule);
+	}
+	
 
    
 }
