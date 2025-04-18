@@ -124,7 +124,8 @@ public class GestionFacade {
     }
 
     public void remplirFormulaireEnseignant(String matricule, javax.swing.JTextField nom, javax.swing.JTextField contact) {
-        new Enseignant(connexion.getInstance()).change_list_enseignant(nom, contact, matricule);
+    	enseignantService.remplirFormulaire(nom, contact, matricule);
+
     }
 
   
