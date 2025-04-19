@@ -4,7 +4,7 @@ public class Strategies {
 	// TousLesJoursStrategy.java
 	public static class TousLesJoursStrategy implements RechercheStrategy {
 	    @Override
-	    public String buildQuery(String classe, String matiere, String jour) {
+	    public String rechercher(String classe, String matiere, String jour) {
 	        String baseQuery = "SELECT seance.*, enseignant.nom, enseignant.contact " +
 	                          "FROM seance " +
 	                          "INNER JOIN enseignant ON enseignant.matricule = seance.matricule " +
@@ -17,7 +17,7 @@ public class Strategies {
 	// JourSpecifiqueStrategy.java
 	public static class JourSpecifiqueStrategy implements RechercheStrategy {
 	    @Override
-	    public String buildQuery(String classe, String matiere, String jour) {
+	    public String rechercher(String classe, String matiere, String jour) {
 	        String baseQuery = "SELECT seance.*, enseignant.nom, enseignant.contact " +
 	                          "FROM seance " +
 	                          "INNER JOIN enseignant ON enseignant.matricule = seance.matricule " +
