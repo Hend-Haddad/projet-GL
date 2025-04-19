@@ -24,7 +24,7 @@ public class Class_etudiant {
 
     public void chercher_et(JTable tabl_seance_et, String choix_classe, String choix_matiere, String choix_jour) {
         try {
-            String query = strategy.buildQuery(choix_classe, choix_matiere, choix_jour);
+            String query = strategy.rechercher(choix_classe, choix_matiere, choix_jour);
             PreparedStatement st = dbConnection.getConnection().prepareStatement(query);
             
             // Configuration des paramètres
