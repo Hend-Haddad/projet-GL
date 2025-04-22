@@ -14,10 +14,14 @@ public class SeanceService {
 
     public boolean ajouterSeance(Seance seance) {
         try {
-            if (seanceDAO.existe(seance)) return false;
+            if (seanceDAO.chevauchement(seance)) {
+                System.out.println("Conflit détecté : chevauchement d'horaire.");
+                return false;
+            }
             seanceDAO.insert(seance);
             return true;
         } catch (Exception e) {
+            e.printStackTrace();
             return false;
         }
     }
