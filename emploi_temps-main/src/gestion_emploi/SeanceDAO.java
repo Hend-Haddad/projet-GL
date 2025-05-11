@@ -10,6 +10,18 @@ public class SeanceDAO {
     public SeanceDAO(DatabaseConnection db) {
         this.db = db;
     }
+    
+    public int getNbSeancesByMatricule(String matricule) throws SQLException {
+        String query = "SELECT COUNT(*) AS total FROM seance WHERE matricule = ?";
+        PreparedStatement st = db.getConnection().prepareStatement(query);
+        st.setString(1, matricule);
+        ResultSet rs = st.executeQuery();
+        if (rs.next()) {
+            return rs.getInt("total");
+        }
+        return 0;
+    }
+
 
     public boolean chevauchement(Seance seance) throws SQLException {
         String query = "SELECT * FROM seance WHERE jour = ?";

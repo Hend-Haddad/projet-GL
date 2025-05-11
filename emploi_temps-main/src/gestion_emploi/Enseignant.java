@@ -12,6 +12,17 @@ public class Enseignant {
     public Enseignant(DatabaseConnection dbConnection) {
         this.dao = new EnseignantDAO(dbConnection);
     }
+    
+    public int getNbSeances(String matricule) {
+        try {
+            SeanceDAO seanceDAO = new SeanceDAO(dao.getDbConnection());
+            return seanceDAO.getNbSeancesByMatricule(matricule);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0;
+        }
+    }
+
 
     public void ajouter_enseignant(String matricule, String nom, String contact) {
         try {
