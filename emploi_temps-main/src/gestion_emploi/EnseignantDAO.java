@@ -9,6 +9,12 @@ public class EnseignantDAO {
     public EnseignantDAO(DatabaseConnection dbConnection) {
         this.dbConnection = dbConnection;
     }
+   
+    public DatabaseConnection getDbConnection() {
+        return dbConnection;
+    }
+
+
 
     public void ajouter(String matricule, String nom, String contact) throws SQLException {
         PreparedStatement st = dbConnection.getConnection()
